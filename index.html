@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Presupuesto</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background-color: #f5f6fa;
+      color: #333;
+      margin: 0;
+      padding: 40px 0;
+    }
+    .container {
+      max-width: 800px;
+      background: #fff;
+      margin: auto;
+      padding: 40px 50px;
+      border-radius: 12px;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 2px solid #e6e9ed;
+      padding-bottom: 20px;
+      margin-bottom: 30px;
+    }
+    .empresa h1 { margin: 0; color: #004aad; font-size: 24px; font-weight: 600; }
+    .empresa p { margin: 3px 0; font-size: 13px; color: #555; }
+    .titulo { text-align: right; }
+    .titulo h2 { margin: 0; font-size: 22px; color: #222; }
+    .titulo p { margin: 3px 0; font-size: 13px; color: #777; }
+    .datos { margin-bottom: 25px; line-height: 1.6; }
+    .datos p { margin: 2px 0; font-size: 14px; }
+    .datos strong { display: inline-block; width: 110px; color: #333; }
+    table {
+      width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14px;
+    }
+    th, td {
+      padding: 10px 8px; border-bottom: 1px solid #e6e9ed;
+    }
+    th {
+      background: #f7f9fb; color: #444; font-weight: 600; text-align: center;
+    }
+    th:first-child, td:first-child { text-align: left !important; }
+    td:nth-child(2), td:nth-child(3), td:nth-child(4) { text-align: center; }
+    tr:last-child td { border-bottom: none; }
+    .totales {
+      text-align: right; margin-top: 30px; font-size: 15px; line-height: 1.6;
+    }
+    .totales p { margin: 4px 0; }
+    .totales strong { font-size: 17px; color: #000; }
+    footer {
+      margin-top: 50px; text-align: center; font-size: 12px; color: #888;
+      border-top: 1px solid #eee; padding-top: 12px; line-height: 1.5;
+    }
+    footer strong { color: #004aad; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="empresa">
+        <h1>Electricidad Gómez</h1>
+        <p>NIF: 12345678A</p>
+        <p>Calle Mayor 45, Madrid</p>
+        <p>Tel: 600 123 456 | info@electricidadgomez.com</p>
+      </div>
+      <div class="titulo">
+        <h2>Presupuesto</h2>
+        <p>Nº: {{ $json.body.numero }}</p>
+        <p>Fecha: {{ $json.body.fecha }}</p>
+      </div>
+    </header>
+
+    <section class="datos">
+      <p><strong>Cliente:</strong> {{ $json.body.cliente }}</p>
+      <p><strong>DNI/NIF:</strong> {{ $json.body.dni }}</p>
+      <p><strong>Dirección:</strong> {{ $json.body.direccion }}</p>
+      <p><strong>Email:</strong> {{ $json.body.email }}</p>
+      <p><strong>Teléfono:</strong> {{ $json.body.telefono }}</p>
+    </section>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Descripción</th>
+          <th>Cantidad</th>
+          <th>Precio Unitario</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{ 
+          $json.body.conceptos.map(c => `
+            <tr>
+              <td>${c.descripcion}</td>
+              <td>${c.cantidad}</td>
+              <td>${c.precioUnitario} €</td>
+              <td>${c.total} €</td>
+            </tr>
+          `).join('')
+        }}
+      </tbody>
+
+
+    </table>
+
+    <div class="totales">
+      <p>Subtotal: {{ $json.body.subtotal }} €</p>
+      <p>IVA (21%): {{ $json.body.iva }} €</p>
+      <p><strong>Total a pagar: {{ $json.body.total }} €</strong></p>
+    </div>
+
+    <footer>
+      Gracias por confiar en nuestros servicios.<br />
+      Para cualquier duda, contáctanos en <strong>info@electricidadgomez.com</strong>.
+    </footer>
+  </div>
+</body>
+</html>
