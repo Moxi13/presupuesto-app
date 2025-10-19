@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Formulario de Presupuesto</title>
+  <style>
+    :root {
+      --color-primary: #004aad;
+      --color-bg: #ffffff;
+      --color-border: #d9dce3;
+      --color-text: #333;
+      --color-light-text: #666;
+      --color-header-bg: #f7f9fb;
+      --color-shadow: rgba(0, 0, 0, 0.08);
+      --font-family: 'Segoe UI', 'Open Sans', sans-serif;
+      --radius: 10px;
+    }
+    body { background: #f1f3f8; }
+    .form-container {
+      max-width: 820px; background: var(--color-bg);
+      margin: 40px auto; padding: 40px 50px;
+      border-radius: var(--radius);
+      box-shadow: 0 0 12px var(--color-shadow);
+      font-family: var(--font-family); color: var(--color-text);
+    }
+    .header {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      border-bottom: 2px solid var(--color-border);
+      padding-bottom: 15px; margin-bottom: 25px;
+    }
+    .empresa h1 { color: var(--color-primary); margin: 0; font-size: 24px; font-weight: 600; }
+    .empresa p { margin: 2px 0; font-size: 13px; color: var(--color-light-text); }
+    .titulo { text-align: right; }
+    .titulo h2 { margin: 0; font-size: 22px; color: var(--color-text); }
+    .titulo input {
+      width: 100px; text-align: right; margin-top: 3px;
+      border: 1px solid var(--color-border); border-radius: 4px;
+      padding: 4px; font-size: 13px;
+    }
+    .section-title {
+      margin-top: 25px; font-size: 18px; font-weight: 600;
+      color: var(--color-primary); border-bottom: 1px solid var(--color-border);
+      padding-bottom: 5px;
+    }
+    .cliente-fields {
+      display: flex; flex-direction: column; gap: 10px; margin-top: 15px;
+    }
+    .cliente-fields label { font-weight: 600; font-size: 14px; }
+    .cliente-fields input {
+      width: 100%; padding: 10px;
+      border: 1px solid var(--color-border); border-radius: 6px;
+      font-size: 14px;
+    }
+    .conceptos { margin-top: 25px; }
+    .conceptos-table {
+      width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14px;
+    }
+    .conceptos-table th {
+      background: var(--color-header-bg); color: var(--color-light-text);
+      font-weight: 600; text-align: center; padding: 10px 6px;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .conceptos-table td {
+      padding: 8px; border-bottom: 1px solid var(--color-border); text-align: center;
+    }
+    .conceptos-table td:first-child { text-align: left; }
+    .conceptos-table input {
+      width: 95%; padding: 8px;
+      border: 1px solid var(--color-border); border-radius: 5px; font-size: 13px;
+    }
+    .botones-fila { text-align: center; margin-top: 10px; }
+    .botones-fila button {
+      background: var(--color-primary); color: #fff; border: none;
+      border-radius: 6px; padding: 8px 14px; font-size: 14px;
+      cursor: pointer; margin: 0 5px;
+    }
+    .botones-fila button:hover { background: #003b8b; }
+    .totales { margin-top: 25px; text-align: right; font-size: 15px; color: var(--color-text); }
+    .totales label { display: inline-block; min-width: 140px; text-align: right; font-weight: 600; }
+    button[type="submit"] {
+      margin-top: 30px; background: var(--color-primary);
+      color: #fff; border: none; border-radius: 6px;
+      padding: 12px 20px; font-size: 15px;
+      cursor: pointer; transition: background 0.2s ease;
+    }
+    button[type="submit"]:hover { background: #003b8b; }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <div class="header">
+      <div class="empresa">
+        <h1>Electricidad Gómez</h1>
+        <p>NIF: 12345678A</p>
+        <p>Calle Mayor 45, Madrid</p>
+        <p>Tel: 600 123 456 | info@electricidadgomez.com</p>
+      </div>
+      <div class="titulo">
+        <h2>Presupuesto</h2>
+        <label>Nº:</label> <input id="numero" placeholder="0001" /><br>
+        <label>Fecha:</label> <input id="fecha" placeholder="00/00/0000" />
+      </div>
+    </div>
+
+    <form id="presupuestoForm">
+      <div class="section-title">Datos del Cliente</div>
+      <div class="cliente-fields">
+        <label>Nombre</label>
+        <input type="text" id="cliente" />
+        <label>DNI/NIF</label>
+        <input type="text" id="dni" />
+        <label>Dirección</label>
+        <input type="text" id="direccion" />
+        <label>Email</label>
+        <input type="email" id="email" />
+        <label>Teléfono</label>
+        <input type="text" id="telefono" />
+      </div>
+
+      <div class="section-title">Conceptos</div>
+      <div class="conceptos">
+        <table class="conceptos-table" id="tablaConceptos">
+          <thead>
+            <tr>
+              <th>Descripción</th>
+              <th>Cantidad</th>
+              <th>Precio Unitario (€)</th>
+              <th>Total (€)</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><input type="text" class="desc" placeholder="Ej: Instalación eléctrica" /></td>
+              <td><input type="number" class="cant" value="1" min="1" /></td>
+              <td><input type="number" class="precio" value="0" min="0" /></td>
+              <td class="total">0.00</td>
+              <td><button type="button" class="remove">-</button></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="botones-fila">
+          <button type="button" id="addRow">+ Añadir fila</button>
+        </div>
+      </div>
+
+      <div class="totales">
+        <p><label>Subtotal (€):</label> <span id="subtotal">0.00</span></p>
+        <p><label>IVA (21%):</label> <span id="iva">0.00</span></p>
+        <p><label>Total (€):</label> <strong><span id="total">0.00</span></strong></p>
+      </div>
+
+      <button type="submit">Enviar a n8n</button>
+    </form>
+  </div>
+
+  <script>
+    const tabla = document.querySelector("#tablaConceptos tbody");
+    const addRow = document.getElementById("addRow");
+    const form = document.getElementById("presupuestoForm");
+    const boton = form.querySelector("button[type='submit']");
+
+    function actualizarTotales() {
+      let subtotal = 0;
+      tabla.querySelectorAll("tr").forEach(tr => {
+        const cant = parseFloat(tr.querySelector(".cant").value) || 0;
+        const precio = parseFloat(tr.querySelector(".precio").value) || 0;
+        const total = cant * precio;
+        tr.querySelector(".total").textContent = total.toFixed(2);
+        subtotal += total;
+      });
+      const iva = subtotal * 0.21;
+      const total = subtotal + iva;
+      document.getElementById("subtotal").textContent = subtotal.toFixed(2);
+      document.getElementById("iva").textContent = iva.toFixed(2);
+      document.getElementById("total").textContent = total.toFixed(2);
+    }
+
+    addRow.addEventListener("click", () => {
+      const newRow = document.createElement("tr");
+      newRow.innerHTML = `
+        <td><input type="text" class="desc" placeholder="Descripción" /></td>
+        <td><input type="number" class="cant" value="1" min="1" /></td>
+        <td><input type="number" class="precio" value="0" min="0" /></td>
+        <td class="total">0.00</td>
+        <td><button type="button" class="remove">-</button></td>`;
+      tabla.appendChild(newRow);
+      attachEvents(newRow);
+    });
+
+    function attachEvents(row) {
+      row.querySelectorAll(".cant, .precio").forEach(input =>
+        input.addEventListener("input", actualizarTotales)
+      );
+      row.querySelector(".remove").addEventListener("click", () => {
+        row.remove();
+        actualizarTotales();
+      });
+    }
+
+    tabla.querySelectorAll("tr").forEach(attachEvents);
+
+    form.addEventListener("submit", async e => {
+      e.preventDefault();
+      actualizarTotales();
+
+      const conceptos = [];
+      tabla.querySelectorAll("tr").forEach(tr => {
+        conceptos.push({
+          descripcion: tr.querySelector(".desc").value,
+          cantidad: tr.querySelector(".cant").value,
+          precioUnitario: tr.querySelector(".precio").value,
+          total: tr.querySelector(".total").textContent
+        });
+      });
+
+      const safe = id => document.getElementById(id)?.value || "";
+
+      const data = {
+        numero: safe("numero"),
+        fecha: safe("fecha"),
+        cliente: safe("cliente"),
+        dni: safe("dni"),
+        direccion: safe("direccion"),
+        email: safe("email"),
+        telefono: safe("telefono"),
+        subtotal: document.getElementById("subtotal").textContent,
+        iva: document.getElementById("iva").textContent,
+        total: document.getElementById("total").textContent,
+        conceptos
+      };
+
+      boton.disabled = true;
+      boton.textContent = "Enviando...";
+
+      try {
+        const res = await fetch("https://primary-production-8473.up.railway.app/webhook-test/Presupuesto", {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify(data)
+        });
+
+        if (res.ok) {
+          boton.textContent = "✅ Enviado correctamente";
+          boton.style.backgroundColor = "#28a745";
+          const msg = document.createElement("p");
+          msg.textContent = "Los datos se han enviado correctamente a n8n.";
+          msg.style.color = "green";
+          msg.style.fontWeight = "bold";
+          form.appendChild(msg);
+          setTimeout(() => {
+            boton.textContent = "Enviar a n8n";
+            boton.style.backgroundColor = "";
+            boton.disabled = false;
+            msg.remove();
+          }, 3000);
+        } else {
+          alert("❌ Error al enviar: " + res.status);
+          boton.disabled = false;
+          boton.textContent = "Enviar a n8n";
+        }
+      } catch (err) {
+        alert("❌ Error de conexión: " + err.message);
+        boton.disabled = false;
+        boton.textContent = "Enviar a n8n";
+      }
+    });
+  </script>
+</body>
+</html>
