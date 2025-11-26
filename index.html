@@ -235,7 +235,7 @@
       boton.textContent = "Enviando...";
 
       try {
-        const res = await fetch("https://primary-production-8473.up.railway.app/webhook-test/Presupuesto", {
+        const res = await fetch("https://primary-production-8473.up.railway.app/webhook/Presupuesto", {
           method: "POST",
           headers: {"Content-Type": "application/json"},
           body: JSON.stringify(data)
